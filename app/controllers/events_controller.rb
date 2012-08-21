@@ -1,5 +1,31 @@
 class EventsController < ApplicationController
+  def test
+  end
   def index
+    events = Event.all
+    stashes = Stash.stashes.select {|stash, value| stash =~ /silence/}
+    cli = {}
+    Client.all.each do |client|
+      cli[client.attributes['name']] = client.attributes
+    end
+    events.each do |event|
+      if stashes.include?("silence/#{event.client}")
+        event.client_silenced = stashes["silence/#{event.client}"]
+      end
+      if stashes.include?("silence/#{event.client}/#{event.check}")
+        event.check_silenced = stashes["silence/#{event.client}/#{event.check}"]
+      end
+      event.client_attributes = cli[event.client]
+    end
+    #
+    # Could use a custom sorter here, as Critical is == 2 and Warning == 1
+    #
+    return_events = []
+    events.sort!{|x,y| y.issued <=> x.issued }
+    events.each{|event| return_events.push(event) if event.status == 2}
+    events.each{|event| return_events.push(event) if event.status == 1}
+    events.each{|event| return_events.push(event) if event.status != 2 && event.status != 1}
+    @events = return_events
   end
   def events_table
     events = Event.all

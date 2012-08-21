@@ -22,12 +22,10 @@ $ ->
           $('#updating_event_list').hide()
           dropTableHooks()
           runTableHooks()
-  updateEventTable()
   setInterval () ->
     update_counter = update_counter + 1
     if update_counter > 60 and modal_shown isnt true
       location.reload()
-    updateEventTable()
   , 60000
   dropTableHooks = ()->
     $('.modal').unbind()

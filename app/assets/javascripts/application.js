@@ -16,4 +16,16 @@
 //= require datepair
 //= require jquery.timepicker
 //= require bootstrap-datepicker
+//
+//= require hamlcoffee
+//= require underscore
+//= require backbone
+//
+//= require sensu_events
+//
+//= require_tree ./models
+//= require_tree ./collections
+//= require_tree ./views
+//= require_tree ./routers
+//= require_tree ./templates
 //= require_tree .
