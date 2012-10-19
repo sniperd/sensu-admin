@@ -20,6 +20,10 @@ class User < ActiveRecord::Base
     self.has_role? :admin
   end
 
+  def read_only?
+    self.has_role? :read_only
+  end
+
   def active?
     self.deleted_at.nil?
   end

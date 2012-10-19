@@ -1,4 +1,6 @@
 %div.alert.alert-info.fade.in{:id => "updating_event_list", :style => "height: 12px; display: none; z-index: 2; position: absolute; margin-bottom: 20px; margin-left: 40%;"}
   %p Updating event list...
+%div.alert.alert-error.fade.in{:id => "error_event_list", :style => "height: 12px; display: none; z-index: 2; position: absolute; margin-bottom: 20px; margin-left: 20%;"}
+  %p Error updating event, either a problem occured or your a read only user.
 
 = render "table"

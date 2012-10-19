@@ -1,4 +1,5 @@
 class Downtime < ActiveRecord::Base
+  resourcify
   attr_accessible :description, :name, :start_time, :stop_time, :user_id, :processed, :completed, :begin_date, :end_date, :begin_time, :end_time
 
   belongs_to :user

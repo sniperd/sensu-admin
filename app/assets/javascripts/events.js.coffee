@@ -46,8 +46,8 @@ $ ->
               $('#event-data-modal').modal("hide")
               updateEventTable()
             else
-              $(self).text("Failed to resolve")
-              $(self).css("color", "red")
+              $('#error_event_list').show()
+              setTimeout (() -> $('#error_event_list').hide()), 5000
 
       $(document).on 'click', '.silence-event', ->
         self = $(this)
@@ -63,7 +63,8 @@ $ ->
               $("#modal_" + misc).modal("hide")
               updateEventTable()
             else
-              alert("Failed to silence...")
+              $('#error_event_list').show()
+              setTimeout (() -> $('#error_event_list').hide()), 5000
 
       $(document).on 'click', '.unsilence-submit-event', ->
         self = $(this)
@@ -76,7 +77,8 @@ $ ->
               $('td[rel="' + misc + '_popup_info"]').attr('data-content', "No")
               $('td[rel="' + misc + '_column_silenced"]').text("No")
             else
-              alert("Failed to unsilence...")
+              $('#error_event_list').show()
+              setTimeout (() -> $('#error_event_list').hide()), 5000
 
     dtable = $('#primary_events_table').dataTable
       bAutoWidth: false

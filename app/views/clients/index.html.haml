@@ -1,3 +1,5 @@
+%div.alert.alert-error.fade.in{:id => "error_event_list", :style => "height: 12px; display: none; z-index: 2; position: absolute; margin-bottom: 20px; margin-left: 20%;"}
+  %p Error updating event, either a problem occured or your a read only user.
 - @clients.each do |client|
   %div{:class => "modal hide", :id => "client_modal_#{client.name}"}
     %div.modal-header

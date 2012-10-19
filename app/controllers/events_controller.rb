@@ -32,45 +32,75 @@ class EventsController < ApplicationController
   end
 
   def resolve
-    resp = Event.manual_resolve(params[:client], params[:check], current_user)
-    respond_to do |format|
-      format.json { render :json => (resp.code == 202).to_s }
+    if current_user.read_only?
+      respond_to do |format|
+        format.json { render :json => false }
+      end
+    else
+      resp = Event.manual_resolve(params[:client], params[:check], current_user)
+      respond_to do |format|
+        format.json { render :json => (resp.code == 202).to_s }
+      end
     end
   end
 
   def silence_client
-    expire_at = nil
-    if !params[:expire_at_time].blank? && !params[:expire_at_date].blank?
-      expire_at = Time.parse("#{params[:expire_at_date]} #{params[:expire_at_time]}")
-    end
-    resp = Event.silence_client(params[:client], params[:description], current_user, expire_at)
-    respond_to do |format|
-      format.json { render :json => (resp.code == 201).to_s }
+    if current_user.read_only?
+      respond_to do |format|
+        format.json { render :json => false }
+      end
+    else
+      expire_at = nil
+      if !params[:expire_at_time].blank? && !params[:expire_at_date].blank?
+        expire_at = Time.parse("#{params[:expire_at_date]} #{params[:expire_at_time]}")
+      end
+      resp = Event.silence_client(params[:client], params[:description], current_user, expire_at)
+      respond_to do |format|
+        format.json { render :json => (resp.code == 201).to_s }
+      end
     end
   end
 
   def silence_check
-    expire_at = nil
-    if !params[:expire_at_time].blank? && !params[:expire_at_date].blank?
-      expire_at = Time.parse("#{params[:expire_at_date]} #{params[:expire_at_time]}")
-    end
-    resp = Event.silence_check(params[:client], params[:check], params[:description], current_user, expire_at)
-    respond_to do |format|
-      format.json { render :json => (resp.code == 201).to_s }
+    if current_user.read_only?
+      respond_to do |format|
+        format.json { render :json => false }
+      end
+    else
+      expire_at = nil
+      if !params[:expire_at_time].blank? && !params[:expire_at_date].blank?
+        expire_at = Time.parse("#{params[:expire_at_date]} #{params[:expire_at_time]}")
+      end
+      resp = Event.silence_check(params[:client], params[:check], params[:description], current_user, expire_at)
+      respond_to do |format|
+        format.json { render :json => (resp.code == 201).to_s }
+      end
     end
   end
 
   def unsilence_client
-    resp = Event.unsilence_client(params[:client], current_user)
-    respond_to do |format|
-      format.json { render :json => (resp.code == 202).to_s }
+    if current_user.read_only?
+      respond_to do |format|
+        format.json { render :json => false }
+      end
+    else
+      resp = Event.unsilence_client(params[:client], current_user)
+      respond_to do |format|
+        format.json { render :json => (resp.code == 202).to_s }
+      end
     end
   end
 
   def unsilence_check
-    resp = Event.unsilence_check(params[:client], params[:check], current_user)
-    respond_to do |format|
-      format.json { render :json => (resp.code == 202).to_s }
+    if current_user.read_only?
+      respond_to do |format|
+        format.json { render :json => false }
+      end
+    else
+      resp = Event.unsilence_check(params[:client], params[:check], current_user)
+      respond_to do |format|
+        format.json { render :json => (resp.code == 202).to_s }
+      end
     end
   end
 

@@ -14,4 +14,5 @@ $ ->
           if data
             $("#client_row_" + $(self).attr('key')).hide()
           else
-            alert("Could not delete client")
+            $('#error_event_list').show()
+            setTimeout (() -> $('#error_event_list').hide()), 5000
