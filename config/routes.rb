@@ -1,45 +1,40 @@
 SensuAdmin::Application.routes.draw do
   devise_for :users
 
-  scope 'users' do
+  namespace :users do
     scope '/:id' do
-      match '/update_password' => 'users#update_password', :via => :put
-      match '/activate' => 'users#activate', :via => :put
+      put 'update_password'
+      put 'activate'
     end
   end
 
-  scope 'events' do
-    match 'events_table' => 'events#events_table', :via => :get
-    match 'modal_data' => 'events#modal_data', :via => :get
-    scope '/:client', :constraints => { :client => /[\w.]+/ } do
-      match '/silence' => 'events#silence_client', :via => :post
-      match '/unsilence' => 'events#unsilence_client', :via => :post
-      scope '/:check' do
-        match '/resolve' => 'events#resolve', :via => :post
-        match '/silence' => 'events#silence_check', :via => :post
-        match '/unsilence' => 'events#unsilence_check', :via => :post
-      end
-    end
+  # If someone can DRY these up properly, please do
+  match '/events/events_table' => 'events#events_table', :via => :get
+  match '/events/modal_data' => 'events#modal_data', :via => :get
+  match '/events/:client/:check/resolve' => 'events#resolve', :via => :post, :id => /[A-Za-z0-9\.]+?/
+  match '/events/:client/silence' => 'events#silence_client', :via => :post, :id => /[A-Za-z0-9\.]+?/
+  match '/events/:client/:check/silence' => 'events#silence_check', :via => :post, :id => /[A-Za-z0-9\.]+?/
+  match '/events/:client/unsilence' => 'events#unsilence_client', :via => :post, :id => /[A-Za-z0-9\.]+?/
+  match '/events/:client/:check/unsilence' => 'events#unsilence_check', :via => :post, :id => /[A-Za-z0-9\.]+?/
+
+  namespace :stashes do
+    post 'create_stash'
+    post 'delete_stash'
+    post 'delete_all_stashes'
   end
 
-  scope 'stashes' do
-    match '/create_stash' => 'stashes#create_stash', :via => :post
-    match '/delete_stash' => 'stashes#delete_stash', :via => :post
-    match '/delete_all_stashes' => 'stashes#delete_all_stashes', :via => :post
-  end
-
-  scope 'downtimes' do
-    match '/old_downtimes' => 'downtimes#old_downtimes', :via => :get
-    match '/force_complete' => 'downtimes#force_complete', :via => :post
+  namespace :downtimes do
+    get 'old_downtimes'
+    post 'force_complete'
   end
 
   match 'checks/:check/submit' => 'checks#submit_check', :via => :post
 
   namespace :api do
-    match '/status' => 'api#status', :via => :get
-    match '/time' => 'api#time', :via => :get
-    match '/setup' => 'api#setup', :via => :get
-    match '/test_api' => 'api#test_api', :via => :post
+    get 'status'
+    get 'time'
+    get 'setup'
+    post 'test_api'
   end
 
   match "settings/missing" => "settings#missing", :via => :get
